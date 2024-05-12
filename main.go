@@ -35,12 +35,13 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error while reading file: %v\n", err)
 	}
 
-	// taxRates := []float64{0, 0.07, 0.15, 0.3}
-	// result := make(map[float64][]float64)
+	calculations := prices.NewMultipleTaxCalculations()
+	taxRates := []float64{0, 0.15, 0.3, 0.5, 0.75, 1}
+	for _, taxrate := range taxRates {
+		taxes := prices.NewTaxAndPrices(taxrate, pricesFromFile)
+		taxes.CalculateTaxes()
+		calculations.AddTaxCalculation(*taxes)
+	}
 
-	taxes1 := prices.NewTaxAndPrices(0.15, pricesFromFile)
-	taxes1.CalculateTaxes()
-
-	fmt.Println(taxes1.PricesWithTax)
-
+	calculations.WriteToFile()
 }

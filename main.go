@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"tax-calculator/prices"
 )
 
 func main() {
@@ -17,7 +19,7 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	var prices []float64
+	var pricesFromFile []float64
 
 	for scanner.Scan() {
 		str := scanner.Text()
@@ -26,23 +28,19 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error converting string %q to float64: %v\n", str, err)
 			continue
 		}
-		prices = append(prices, f)
+		pricesFromFile = append(pricesFromFile, f)
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error while reading file: %v\n", err)
 	}
 
-	taxRates := []float64{0, 0.07, 0.15, 0.3}
-	result := make(map[float64][]float64)
+	// taxRates := []float64{0, 0.07, 0.15, 0.3}
+	// result := make(map[float64][]float64)
 
-	for _, p := range prices {
-		result[p] = []float64{}
-		for _, t := range taxRates {
-			result[p] = append(result[p], p*t)
-		}
-	}
+	taxes1 := prices.NewTaxAndPrices(0.15, pricesFromFile)
+	taxes1.CalculateTaxes()
 
-	fmt.Println(result)
+	fmt.Println(taxes1.PricesWithTax)
 
 }

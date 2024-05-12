@@ -3,6 +3,7 @@ package prices
 import (
 	"encoding/json"
 	"log"
+	"math"
 	"os"
 )
 
@@ -31,7 +32,8 @@ func NewMultipleTaxCalculations() *MultipleTaxCalculations {
 func (TaP *TaxAndPrices) CalculateTaxes() error {
 	for _, p := range TaP.InputPrices {
 		priceWithTax := p * (1 + TaP.TaxRate)
-		TaP.PricesWithTax = append(TaP.PricesWithTax, priceWithTax)
+		roundedPriceWithTax := math.Round(priceWithTax*100) / 100
+		TaP.PricesWithTax = append(TaP.PricesWithTax, roundedPriceWithTax)
 	}
 	return nil
 }

@@ -2,22 +2,23 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
+	"tax-calculator/filemanager"
 	"tax-calculator/prices"
 )
 
 func main() {
-	file, err := os.Open("prices.txt")
+	byteData, err := filemanager.ReadFileToBytes("prices.txt")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to open file: %v\n", err)
-		return
+		log.Fatalf("Failed to read data: %v", err)
 	}
-	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(bytes.NewReader(byteData))
 
 	var pricesFromFile []float64
 

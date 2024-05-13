@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"math"
-	"os"
+
+	"tax-calculator/filemanager"
 )
 
 type TaxAndPrices struct {
@@ -43,16 +44,14 @@ func (MTC *MultipleTaxCalculations) AddTaxCalculation(tap TaxAndPrices) {
 }
 
 func (MTC *MultipleTaxCalculations) WriteToFile() error {
-	file, err := os.Create("tax_and_prices.json")
+	jsonData, err := json.MarshalIndent(MTC, "", "  ")
 	if err != nil {
-		log.Fatalf("Failed to create file")
-		return err
+		log.Printf("Error marshaling data: %v", err)
 	}
-	defer file.Close()
-	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(MTC); err != nil {
-		log.Fatalf("Error encoding data to JSON: %v", err)
+	err = filemanager.WriteJsonToFile("tax_and_prices2.json", jsonData)
+	if err != nil {
+		log.Printf("Error writing to file: %v", err)
+		return err
 	}
 
 	return nil

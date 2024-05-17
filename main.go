@@ -8,11 +8,13 @@ import (
 	"os"
 	"strconv"
 
+	"tax-calculator/filemanager"
 	"tax-calculator/prices"
 )
 
 func main() {
-	calculations := prices.NewMultipleTaxCalculations("prices.txt", "tax_and_prices.json")
+	ioManager := filemanager.NewFileManager("prices.txt", "tax_and_prices.json")
+	calculations := prices.NewMultipleTaxCalculations(ioManager)
 	byteData, err := calculations.IOManager.ReadFileToBytes()
 	if err != nil {
 		log.Fatalf("Failed to read data: %v", err)

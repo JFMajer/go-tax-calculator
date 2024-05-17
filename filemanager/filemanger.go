@@ -5,6 +5,11 @@ import (
 	"os"
 )
 
+type IOManager interface {
+	WriteJsonToFile(data []byte) error
+	ReadFileToBytes() ([]byte, error)
+}
+
 type FileManager struct {
 	InputFile  string
 	OutputFile string

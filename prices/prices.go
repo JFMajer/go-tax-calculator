@@ -16,7 +16,7 @@ type TaxAndPrices struct {
 
 type MultipleTaxCalculations struct {
 	Calculations []TaxAndPrices
-	IOManager    filemanager.FileManager
+	IOManager    filemanager.IOManager
 }
 
 func NewTaxAndPrices(taxrate float64, inputprices []float64) *TaxAndPrices {
@@ -27,9 +27,9 @@ func NewTaxAndPrices(taxrate float64, inputprices []float64) *TaxAndPrices {
 	}
 }
 
-func NewMultipleTaxCalculations(inputfile string, outputfile string) *MultipleTaxCalculations {
+func NewMultipleTaxCalculations(ioManager filemanager.IOManager) *MultipleTaxCalculations {
 	return &MultipleTaxCalculations{
-		IOManager: filemanager.NewFileManager(inputfile, outputfile),
+		IOManager: ioManager,
 	}
 }
 

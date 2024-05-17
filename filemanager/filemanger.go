@@ -5,8 +5,13 @@ import (
 	"os"
 )
 
-func WriteJsonToFile(filename string, data []byte) error {
-	file, err := os.Create(filename)
+type FileManager struct {
+	InputFile  string
+	OutputFile string
+}
+
+func (fm FileManager) WriteJsonToFile(data []byte) error {
+	file, err := os.Create(fm.OutputFile)
 	if err != nil {
 		log.Printf("Failed to create file: %v", err)
 		return err
@@ -21,11 +26,18 @@ func WriteJsonToFile(filename string, data []byte) error {
 	return nil
 }
 
-func ReadFileToBytes(filename string) ([]byte, error) {
-	data, err := os.ReadFile(filename)
+func (fm FileManager) ReadFileToBytes() ([]byte, error) {
+	data, err := os.ReadFile(fm.InputFile)
 	if err != nil {
-		log.Printf("Error reading file %s: %v", filename, err)
+		log.Printf("Error reading file %s: %v", fm.InputFile, err)
 		return nil, err
 	}
 	return data, nil
+}
+
+func NewFileManager(inputfile string, outputfile string) FileManager {
+	return FileManager{
+		InputFile:  inputfile,
+		OutputFile: outputfile,
+	}
 }

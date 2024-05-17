@@ -8,12 +8,12 @@ import (
 	"os"
 	"strconv"
 
-	"tax-calculator/filemanager"
 	"tax-calculator/prices"
 )
 
 func main() {
-	byteData, err := filemanager.ReadFileToBytes("prices.txt")
+	calculations := prices.NewMultipleTaxCalculations("prices.txt", "tax_and_prices.json")
+	byteData, err := calculations.IOManager.ReadFileToBytes()
 	if err != nil {
 		log.Fatalf("Failed to read data: %v", err)
 	}
@@ -36,7 +36,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error while reading file: %v\n", err)
 	}
 
-	calculations := prices.NewMultipleTaxCalculations()
 	taxRates := []float64{0, 0.15, 0.3, 0.5, 0.75, 1}
 	for _, taxrate := range taxRates {
 		taxes := prices.NewTaxAndPrices(taxrate, pricesFromFile)

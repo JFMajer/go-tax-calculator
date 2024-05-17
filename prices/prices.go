@@ -16,6 +16,7 @@ type TaxAndPrices struct {
 
 type MultipleTaxCalculations struct {
 	Calculations []TaxAndPrices
+	IOManager    filemanager.FileManager
 }
 
 func NewTaxAndPrices(taxrate float64, inputprices []float64) *TaxAndPrices {
@@ -26,8 +27,10 @@ func NewTaxAndPrices(taxrate float64, inputprices []float64) *TaxAndPrices {
 	}
 }
 
-func NewMultipleTaxCalculations() *MultipleTaxCalculations {
-	return &MultipleTaxCalculations{}
+func NewMultipleTaxCalculations(inputfile string, outputfile string) *MultipleTaxCalculations {
+	return &MultipleTaxCalculations{
+		IOManager: filemanager.NewFileManager(inputfile, outputfile),
+	}
 }
 
 func (TaP *TaxAndPrices) CalculateTaxes() error {
@@ -48,7 +51,7 @@ func (MTC *MultipleTaxCalculations) WriteToFile() error {
 	if err != nil {
 		log.Printf("Error marshaling data: %v", err)
 	}
-	err = filemanager.WriteJsonToFile("tax_and_prices2.json", jsonData)
+	err = MTC.IOManager.WriteJsonToFile(jsonData)
 	if err != nil {
 		log.Printf("Error writing to file: %v", err)
 		return err
